@@ -1,0 +1,16 @@
+i tk2d 1
+w 128
+h 32
+~
+n BlockDown
+s 0 0 32 32
+~
+n BlockLeft
+s 32 0 32 32
+~
+n BlockRight
+s 64 0 32 32
+~
+n BlockUp
+s 96 0 32 32
+~
