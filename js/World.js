@@ -9,17 +9,25 @@ World = function(game) {
 var currentScreen;
 var currentScreenId = [0,0];
 var player;
+var map;
+var tileset;
 
 World.prototype = {
 
     preload: function () {
 
-	},
+        },
 
 	create: function () {
       currentScreen = new Screen();
       player = new Player(game, 100, 100);
       game.add.existing(player);
+
+
+         map = game.add.tilemap('map');
+        // Add the tileset 'tiles' to the game
+        tileset = game.add.tileset('tiles');
+
 	},
 
 	update: function() {

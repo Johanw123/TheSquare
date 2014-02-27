@@ -1,7 +1,7 @@
 //  Here is a custom game object
-Block = function (game, x, y) {
+Block = function (game, x, y, texure) {
 
-    Phaser.Sprite.call(this, game, x, y, 'block');
+    Phaser.Sprite.call(this, game, x, y, texture);
 
 
 };

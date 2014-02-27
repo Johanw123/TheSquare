@@ -16,7 +16,11 @@ game_state.main.prototype = {
     preload: function() {
         game.load.image('player', 'assets/sprites/Player.png');
         game.load.image('block', 'assets/sprites/Block.png');
-        
+        game.load.tilemap('map', 'assets/maps/map.json', null, Phaser.Tilemap.TILED_JSON);
+        // Load the tileset 'level.png', telling Phaser each frame is 16x16
+        game.load.tileset('tiles', 'assets/sheets/sheet.png', 32, 32);
+        // Load the spritesheet 'character.png', telling Phaser each frame is 10x16
+        //game.load.spritesheet('character', 'assets/character.png', 32, 32);
     },
 
     create: function() {
