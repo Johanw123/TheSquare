@@ -11,6 +11,7 @@ var currentScreenId = [0,0];
 var player;
 var map;
 var tileset;
+var layer;
 
 World.prototype = {
 
@@ -21,13 +22,30 @@ World.prototype = {
 	create: function () {
       currentScreen = new Screen();
       player = new Player(game, 100, 100);
+      player.body.gravity.y = 5;
       game.add.existing(player);
-
-
-         map = game.add.tilemap('map');
+      game.camera.follow(player);
+        
+        //map = game.load.tilemap('map');
         // Add the tileset 'tiles' to the game
+        //tileset = game.load.tileset('tiles');
+        
+         
+        map = game.add.tilemap('map');
+		map.addTilesetImage('tiles');
+		//map.setCollisionByExclusion([ 13, 14, 15, 16, 46, 47, 48, 49, 50, 51 ]);
+		layer = map.createLayer('Tile Layer 1');
+		//layer.resizeWorld();
+        
+        /*
+       map = game.add.tilemap('map');
         tileset = game.add.tileset('tiles');
-
+        tileset.setCollisionRange(0, tileset.total - 1, true, true, true, true);
+        
+        
+        layer = game.add.tilemapLayer(0, 0, 240, 128, tileset, map, 0);
+         layer.resizeWorld();
+         */
 	},
 
 	update: function() {
@@ -37,9 +55,9 @@ World.prototype = {
         if (game.input.mousePointer.isDown)
         {
             if(game.input.mousePointer.x > 350)
-                ++player.x;
+                player.x += 5;
             else
-                --player.x;
+                player.x -= 5;
         }
         
         this.checkPlayerOutsideScreen();
