@@ -1,6 +1,12 @@
 // We start by initializing Phaser
 // Parameters: width of the game, height of the game, how to render the game, the HTML div that will contain the game
-var game = new Phaser.Game(750, 600, Phaser.AUTO, 'phaser-example');
+var width = navigator.isCocoonJS ? window.innerWidth : 800;
+var height = navigator.isCocoonJS ? window.innerHeight : 600;
+var dips = window.devicePixelRatio;
+
+width = width * dips;
+height = height * dips;
+var game = new Phaser.Game(width, height, Phaser.WEBGL, 'phaser-example');
 //var game = new Phaser.Game(320, 416, Phaser.CANVAS, "content",{ preload: preload, create: create, update: update });
 
 var world;
@@ -16,24 +22,37 @@ game_state.main.prototype = {
 
     preload: function() {
         game.load.image('player', 'assets/sprites/Player.png');
-        game.load.image('block', 'assets/sprites/Block.png');
-        
-        
+
+        //game.load.image('tiles', 'assets/sheets/sheet.png');
+       // game.load.tilemap('square', 'assets/maps/map.json', null, Phaser.Tilemap.TILED_JSON);
+
+
         game.load.tilemap('map', 'assets/maps/map.json', null, Phaser.Tilemap.TILED_JSON);
-        //game.load.tileset('tiles', 'assets/sheets/sheet.png', 32, 32);
-        
-        
-        //game.load.tilemap('level1', 'assets/games/starstruck/level1.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('tiles', 'assets/sheets/sheet.png');
 
     },
 
     create: function() {
-        this.game.stage.backgroundColor = '#FFFFFF';
+        this.game.stage.backgroundColor = '#00000';
+
+        var ratio = getRatio('all', 800, 600);
+
+        if (navigator.isCocoonJS) {
+            game.world._container.scale.x = ratio.x;
+            game.world._container.scale.y = ratio.y;
+            game.world._container.updateTransform();
+        } else {
+            game.stage.scaleMode = Phaser.StageScaleMode.SHOW_ALL;
+            game.stage.scale.minWidth = 800;
+            game.stage.scale.minHeight = 600;
+            game.stage.scale.pageAlignHorizontally = true;
+            game.stage.scale.setScreenSize(true);
+        }
        
-        world = new World();
+        world = new World(game);
         world.preload();
         world.create();
+
 
     },
         
@@ -41,12 +60,40 @@ game_state.main.prototype = {
 
        world.update();
     },
+    render: function()
+    {
+        world.render();
+    }
     
 };
 
 
 
+function getRatio(type, w, h) {
+    var scaleX = width / w,
+        scaleY = height / h,
+        result = {
+            x: 1,
+            y: 1
+        };
 
+    switch (type) {
+        case 'all':
+            result.x = scaleX > scaleY ? scaleY : scaleX;
+            result.y = scaleX > scaleY ? scaleY : scaleX;
+            break;
+        case 'fit':
+            result.x = scaleX > scaleY ? scaleX : scaleY;
+            result.y = scaleX > scaleY ? scaleX : scaleY;
+            break;
+        case 'fill':
+            result.x = scaleX;
+            result.y = scaleY;
+            break;
+    }
+
+    return result;
+}
 
 
 // And finally we tell Phaser to add and start our 'main' state
